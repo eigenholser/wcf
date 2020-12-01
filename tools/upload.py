@@ -26,7 +26,7 @@ if __name__ == '__main__':
         reader = csv.DictReader(csv_file, skipinitialspace=True)
 
         for row in reader:
-            row["employeeId"] = int(row["employeeId"])
+            row["emplyeeId"] = int(row["emplyeeId"])
             row["totalData"] = float(row["totalData"])
             row["totalMinutes"] = int(row["totalMinutes"])
             print(json.dumps(row, indent=4))
