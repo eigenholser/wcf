@@ -2,7 +2,6 @@ package com.zyx2.practice.wcf.view;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +15,12 @@ import javax.inject.Named;
 import com.zyx2.practice.wcf.model.Phone;
 import com.zyx2.practice.wcf.model.Usage;
 import com.zyx2.practice.wcf.model.UsageDTO;
-import com.zyx2.practice.wcf.repository.PhoneRepository;
 import com.zyx2.practice.wcf.repository.UsageRepository;
 import com.zyx2.practice.wcf.service.ReportService;
 
 @Named
 @RequestScoped
 public class ReportBean {
-
-	@Inject
-	private PhoneRepository phoneRepository;
 
 	@Inject
 	UsageRepository usageRepository;
@@ -50,11 +45,10 @@ public class ReportBean {
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime date = LocalDateTime.now();
 		latestDate = usageRepository.maxDate();
-		usages = usageRepository.findByDate(reportService.startDateTime(latestDate));
+		usages = usageRepository.findByDate(reportService.startDateTime(latestDate)); // TODO: Pass in start date and end date.
 		Set<Long> activeEmployeeIds = reportService.usageEmployeeId(usages.stream());
 		phones = reportService.getActivePhones(activeEmployeeIds);
 		this.date = df.format(date);
-		phones = phoneRepository.findAllPhones();
 		phoneCount = phones.size();
 		totalMinutes = reportService.computeTotalMinutes(usages.stream());
 		totalData = reportService.computeTotalData(usages.stream());
