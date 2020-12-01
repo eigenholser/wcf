@@ -33,8 +33,8 @@ public class UsageDTO {
 				.collect(Collectors.toList());
 
 		// Sort descending by date
-		Collections.sort(phoneUsage, (c1, c2) -> {
-			if (c1.getDate().isBefore(c2.getDate()))
+		Collections.sort(phoneUsage, (a, b) -> {
+			if (a.getDate().isBefore(b.getDate()))
 				return 1;
 			else
 				return -1;

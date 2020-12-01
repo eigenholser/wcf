@@ -2,6 +2,7 @@ package com.zyx2.practice.wcf.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,6 +48,13 @@ public class ReportService {
 				phones.add(phone);
 			}
 		}
+		
+		Collections.sort(phones, (a, b) -> {
+			if (a.getEmployeeId() > b.getEmployeeId())
+				return 1;
+			else
+				return -1;
+		});
 		return phones;
 	}
 
