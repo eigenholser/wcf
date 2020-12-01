@@ -14,7 +14,8 @@ And then:
 
 ## Implementation Notes
 
-Implementated using JEE8 (or is it EE4J now?) with Wildfly 18.
+Implementated using JEE8 (or is it EE4J now?) with Wildfly 18. Persistence is
+implemented with an in-memory H2 database.
 
 There are no unit or integration tests. Shocking for me but it was a holiday
 last week. :)
@@ -32,3 +33,7 @@ The usage CSV file has a typo in one of the headers. Maybe that was part of the
 exercise? I left it in there and translated it with an annotation in the entity
 object.
 
+A REST API is included for no extra cost. I used it for uploading the data and
+for doing some troubleshooting. It was convenient to write a bit of Python code
+to perform the upload. Alternatively the CSV could have been converted to SQL
+and imported but the API approach felt like the better answer.
