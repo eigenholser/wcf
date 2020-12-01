@@ -69,7 +69,8 @@ public class UsageDTO {
 				Integer newMinute = minuteUsage.get(minuteUsage.size() - 1) + usage.getTotalMinutes();
 				minuteUsage.set(minuteUsage.size() - 1, newMinute);
 
-				BigDecimal newData = dataUsage.get(dataUsage.size() - 1).add(new BigDecimal(usage.getTotalData().toString()));
+				BigDecimal newData = dataUsage.get(dataUsage.size() - 1)
+						.add(new BigDecimal(usage.getTotalData().toString()));
 				newData.setScale(2, RoundingMode.HALF_UP);
 				dataUsage.set(dataUsage.size() - 1, newData);
 			} else {

@@ -42,11 +42,11 @@ public class UsageRepository {
 		return em.createQuery(cq).getResultStream();
 	}
 	
-	public List<Usage> findByDate(LocalDate date) {
+	public List<Usage> findByDate(LocalDate startDate, LocalDate endDate) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Usage> cq = cb.createQuery(Usage.class);
 		Root<Usage> root = cq.from(Usage.class);
-		cq.select(root).where(cb.greaterThan(root.get(Usage_.date), date));
+		cq.select(root).where(cb.between(root.get(Usage_.date), startDate, endDate));
 		return em.createQuery(cq).getResultList();
 	}
 	

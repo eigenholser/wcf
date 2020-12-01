@@ -33,8 +33,7 @@ public class ReportBean {
 	private int phoneCount;
 	private List<Phone> phones;
 	private List<Usage> usages;
-	private String date;
-	private LocalDate latestDate;
+	private String reportDate;
 	private Float averageMinutes;
 	private Float averageData;
 	private Integer totalMinutes;
@@ -42,13 +41,19 @@ public class ReportBean {
 	
 	@PostConstruct
 	public void init() {
+		// Start date and end date for report.
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDateTime date = LocalDateTime.now();
-		latestDate = usageRepository.maxDate();
-		usages = usageRepository.findByDate(reportService.startDateTime(latestDate)); // TODO: Pass in start date and end date.
+		LocalDate endDate = usageRepository.maxDate().plusDays(1L); // XXX: Add one day for the query
+		LocalDate startDate = reportService.startDate(endDate);
+		usages = usageRepository.findByDate(startDate, endDate);
+		
+		// Associated phones
 		Set<Long> activeEmployeeIds = reportService.usageEmployeeId(usages.stream());
 		phones = reportService.getActivePhones(activeEmployeeIds);
-		this.date = df.format(date);
+		
+		// Header summary
+		LocalDateTime reportDate = LocalDateTime.now();
+		this.reportDate = df.format(reportDate);
 		phoneCount = phones.size();
 		totalMinutes = reportService.computeTotalMinutes(usages.stream());
 		totalData = reportService.computeTotalData(usages.stream());
@@ -58,6 +63,7 @@ public class ReportBean {
 		// Initialize UsageDTO for all phones
 		phones.stream().forEach(phone -> usageDetail.add(new UsageDTO(phone, usages)));
 		
+		// Squash header list
 		for (UsageDTO ud : usageDetail) {
 			ud.getMonthHeaders().stream()
 				.filter(month -> !monthHeaders.contains(month))
@@ -86,12 +92,8 @@ public class ReportBean {
 		return usages;
 	}
 
-	public String getDate() {
-		return date;
-	}
-
-	public LocalDate getLatestDate() {
-		return latestDate;
+	public String getReportDate() {
+		return reportDate;
 	}
 
 	public Float getAverageMinutes() {

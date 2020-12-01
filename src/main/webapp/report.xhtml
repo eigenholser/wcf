@@ -7,13 +7,18 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
 	<title>Cell Phone Usage Report</title>
+	<style type="text/css">
+	body {
+		font-family: courier;
+	}
+	</style>
 </h:head>
 <h:body>
 	<h3>Cell Phone Usage Report</h3>
 
 	<p>
 		Report Date:
-		<h:outputText value="#{reportBean.date}" />
+		<h:outputText value="#{reportBean.reportDate}" />
 	</p>
 
 	<p>

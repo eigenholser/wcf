@@ -29,8 +29,8 @@ public class ReportService {
 	/*
 	 * Choosing to start reporting in the past by REPORT_RANGE months.
 	 */
-	public LocalDate startDateTime(LocalDate latestDate) {
-		return latestDate.minusMonths(REPORT_RANGE);
+	public LocalDate startDate(LocalDate endDate) {
+		return endDate.minusMonths(REPORT_RANGE).withDayOfMonth(1);
 	}
 
 	public Set<Long> usageEmployeeId(Stream<Usage> usages) {
