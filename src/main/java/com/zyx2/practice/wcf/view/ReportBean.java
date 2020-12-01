@@ -66,7 +66,8 @@ public class ReportBean {
 		// Initialize UsageDTO for all phones
 		phones.stream().forEach(phone -> usageDetail.add(new UsageDTO(phone, usages)));
 		
-		// Squash header list
+		// Squash header list to make sure we have a complete list of headers to display.
+		// Not a super reliable approach but it fits this use case.
 		for (UsageDTO ud : usageDetail) {
 			ud.getMonthHeaders().stream()
 				.filter(month -> !monthHeaders.contains(month))
