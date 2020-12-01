@@ -1,5 +1,7 @@
 package com.zyx2.practice.wcf.view;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,9 +37,9 @@ public class ReportBean {
 	private List<Usage> usages;
 	private String reportDate;
 	private Float averageMinutes;
-	private Float averageData;
+	private BigDecimal averageData;
 	private Integer totalMinutes;
-	private Float totalData;
+	private BigDecimal totalData;
 	
 	@PostConstruct
 	public void init() {
@@ -56,9 +58,10 @@ public class ReportBean {
 		this.reportDate = df.format(reportDate);
 		phoneCount = phones.size();
 		totalMinutes = reportService.computeTotalMinutes(usages.stream());
-		totalData = reportService.computeTotalData(usages.stream());
+		totalData = new BigDecimal(reportService.computeTotalData(usages.stream()).toString()).setScale(2, RoundingMode.HALF_UP);
 		averageMinutes = (float) (totalMinutes / phones.size());
-		averageData = totalData / phones.size();
+		averageData = totalData
+				.divide(new BigDecimal(new Integer(phones.size()).toString()), 2, RoundingMode.HALF_UP);
 		
 		// Initialize UsageDTO for all phones
 		phones.stream().forEach(phone -> usageDetail.add(new UsageDTO(phone, usages)));
@@ -100,7 +103,7 @@ public class ReportBean {
 		return averageMinutes;
 	}
 
-	public Float getAverageData() {
+	public BigDecimal getAverageData() {
 		return averageData;
 	}
 
@@ -108,7 +111,7 @@ public class ReportBean {
 		return totalMinutes;
 	}
 
-	public Float getTotalData() {
+	public BigDecimal getTotalData() {
 		return totalData;
 	}
 
