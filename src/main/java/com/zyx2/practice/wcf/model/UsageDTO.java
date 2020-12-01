@@ -1,5 +1,7 @@
 package com.zyx2.practice.wcf.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.TextStyle;
@@ -15,7 +17,7 @@ public class UsageDTO {
 	private String phoneModel;
 	private LocalDate purchaseDate;
 	private List<Integer> minuteUsage = new ArrayList<>();
-	private List<Float> dataUsage = new ArrayList<>();
+	private List<BigDecimal> dataUsage = new ArrayList<>();
 	private List<String> monthHeaders = new ArrayList<>();
 
 	public UsageDTO(Phone phone, List<Usage> usages) {
@@ -26,7 +28,8 @@ public class UsageDTO {
 
 		// Extract all usages for given phone (since we are assuming one phone per
 		// employee)
-		List<Usage> phoneUsage = usages.stream().filter(usage -> (usage.getEmployeeId().compareTo(employeeId) == 0))
+		List<Usage> phoneUsage = usages.stream() //
+				.filter(usage -> (usage.getEmployeeId().compareTo(employeeId) == 0)) //
 				.collect(Collectors.toList());
 
 		// Sort descending by date
@@ -36,15 +39,15 @@ public class UsageDTO {
 			else
 				return -1;
 		});
-		
+
 		// Generate month name headers
 		monthHeaders = phoneUsage.stream().map(pUsage -> {
 			String month = pUsage.getDate().getMonth().getDisplayName(TextStyle.SHORT, Locale.US).toString();
 			int year = pUsage.getDate().getYear();
 			return month + "_" + year;
-		})
-			.distinct()
-			.collect(Collectors.toList());
+		}) //
+				.distinct() //
+				.collect(Collectors.toList());
 
 		// Extract minutes/data combining possible non-distinct monthly objects.
 		LocalDate referenceDate = null;
@@ -59,18 +62,19 @@ public class UsageDTO {
 
 			if (dataUsage.isEmpty() && minuteUsage.isEmpty()) {
 				minuteUsage.add(0);
-				dataUsage.add(0f);
+				dataUsage.add(BigDecimal.ZERO.setScale((2)));
 			}
 
 			if (currentMonth == referenceMonth) {
 				Integer newMinute = minuteUsage.get(minuteUsage.size() - 1) + usage.getTotalMinutes();
 				minuteUsage.set(minuteUsage.size() - 1, newMinute);
 
-				Float newData = dataUsage.get(dataUsage.size() - 1) + usage.getTotalData();
+				BigDecimal newData = dataUsage.get(dataUsage.size() - 1).add(new BigDecimal(usage.getTotalData().toString()));
+				newData.setScale(2, RoundingMode.HALF_UP);
 				dataUsage.set(dataUsage.size() - 1, newData);
 			} else {
 				minuteUsage.add(usage.getTotalMinutes());
-				dataUsage.add(usage.getTotalData());
+				dataUsage.add(new BigDecimal(usage.getTotalData().toString()).setScale(2, RoundingMode.HALF_UP));
 			}
 
 			referenceDate = usage.getDate();
@@ -97,7 +101,7 @@ public class UsageDTO {
 		return minuteUsage;
 	}
 
-	public List<Float> getDataUsage() {
+	public List<BigDecimal> getDataUsage() {
 		return dataUsage;
 	}
 
