@@ -12,6 +12,10 @@ And then:
     cd tools
     python upload.py
 
+Visit the web page in your browser:
+
+    http://localhost:8080/wcf/faces/report.xhtml
+
 ## Implementation Notes
 
 Implementated using JEE8 (or is it EE4J now?) with Wildfly 18. Persistence is
