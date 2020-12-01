@@ -1,31 +1,30 @@
 package com.zyx2.practice.wcf.model;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import javax.json.bind.annotation.JsonbDateFormat;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Positive;
 
 @Entity
 public class Phone {
 	@Id
+	@Digits(integer=4, fraction=0) @Positive
 	private Long employeeId;
 
+	@NotEmpty
 	private String employeeName;
 
 	@JsonbDateFormat(value = "yyyyMMdd")
+	@Past
 	private LocalDate purchaseDate;
 
+	@NotEmpty
 	private String model;
-	
-//	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//	@JoinColumn(name="employeeId")
-//	private List<Usage> usages;
 
 	public Long getEmployeeId() {
 		return employeeId;
@@ -64,16 +63,5 @@ public class Phone {
 		return "Phone [employeeId=" + employeeId + ", employeeName=" + employeeName + ", purchaseDate=" + purchaseDate
 				+ ", model=" + model + "]";
 	}
-
-//	public List<Usage> getUsages() {
-//		return usages;
-//	}
-//
-//	public void setUsages(List<Usage> usages) {
-//		this.usages = usages;
-//	}
-
-
-	
 
 }
