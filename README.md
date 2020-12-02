@@ -42,7 +42,8 @@ for doing some troubleshooting. It was convenient to write a bit of Python code
 to perform the upload. Alternatively the CSV could have been converted to SQL
 and imported but the API approach felt like the better answer.
 
-The feature request for printable report was ambiguous. If this were a real
-business requirement I would be asking the product manager for clarification.
-I presume that <ctrl>-p is sufficient for this requirement. I could think of
-other solutions but none that justify the additional work and constraints.
+The feature request for sending a report to a local printer was ambiguous. If
+this were a real business requirement I would be asking the product manager
+for clarification.  I presume that ctrl-p is sufficient for this requirement.
+I could think of other solutions but none that justify the additional work and
+constraints.
